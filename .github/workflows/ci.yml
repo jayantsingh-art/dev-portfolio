@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Validate index.html exists
+        run: |
+          if [ ! -f index.html ]; then
+            echo "ERROR: index.html not found"
+            exit 1
+          fi
+          echo "index.html found - validation passed"
+      - name: Check HTML structure
+        run: |
+          if grep -q "<!DOCTYPE html>" index.html; then
+            echo "Valid HTML document"
+          else
+            echo "ERROR: Missing DOCTYPE declaration"
+            exit 1
+          fi
